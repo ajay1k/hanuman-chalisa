@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanuman Chalisa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            margin: 10;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Merriweather', serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 70px;
+            color: #800000;
+            background: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.92;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 00%;
+            height: 0%;
+            background: radial-gradient(circle, rgba(26, 26, 26, 0.5), rgba(0, 0, 0, 0.7));
+            z-index: -1;
+        }
+
+        .container {
+            margin-top: 100px auto;
+            display: flex;
+            z-index: 2;
+            background: rgba(255, 245, 230, 0.25);
+            backdrop-filter: blur(4px);
+            border-radius: 55px;
+            padding: 5px;
+            max-width: 500px;
+            width: 75%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35), inset 0 0 8px rgba(255, 153, 51, 0.2);
+            border: 1px solid rgba(255, 153, 51, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .container:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .om-logo {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .om-logo::before {
+            content: '🕉';
+            font-family: 'Noto Serif Devanagari', serif;
+            font-size: 3.2em;
+            color: #ff9933;
+            text-shadow: 0 0 12px rgba(255, 153, 51, 0.8), 0 0 24px rgba(255, 153, 51, 0.4);
+            animation: glow 2.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 12px rgba(255, 153, 51, 0.8), 0 0 24px rgba(255, 153, 51, 0.4); }
+            to { text-shadow: 0 0 18px rgba(255, 153, 51, 1), 0 0 36px rgba(255, 153, 51, 0.6); }
+        }
+
+        h1 {
+            font-family: 'Noto Serif Devanagari', serif;
+            color: #800000;
+            font-size: 2.3em;
+            font-weight: 700;
+            margin: 0 0 15px;
+            text-align: center;
+            letter-spacing: 0.8px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        h1::before,
+        h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 1.8px;
+            background: linear-gradient(to right, transparent, #ff9933, transparent);
+        }
+
+        h1::before { top: -8px; }
+        h1::after { bottom: -8px; }
+
+        .audio-player {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            animation: fadeInControls 0.8s ease-out;
+        }
+
+        @keyframes fadeInControls {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .audio {
+            display: none;
+        }
+
+        .custom-audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 245, 230, 0.3);
+            backdrop-filter: blur(6px);
+            padding: 10px 18px;
+            border-radius: 35px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 153, 51, 0.3);
+            transition: opacity 0.3s ease;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .play-pause-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #ff9933, #800000);
+            color: #fff5e6;
+            border: none;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+
+        .play-pause-button:hover {
+            background: linear-gradient(145deg, #800000, #ff9933);
+            transform: scale(1.12);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .play-pause-button:active {
+            transform: scale(0.92);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .restart-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #fff5e6, #f5e6d3);
+            color: #800000;
+            border: none;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+
+        .restart-button:hover {
+            background: linear-gradient(145deg, #ff9933, #800000);
+            color: #fff5e6;
+            transform: scale(1.12);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .restart-button:active {
+            transform: scale(0.92);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 5px;
+            background: rgba(255, 245, 230, 0.4);
+            border-radius: 3px;
+            overflow: hidden;
+            cursor: pointer;
+            max-width: 200px;
+            border: 1px solid rgba(128, 0, 0, 0.2);
+            transition: background 0.2s;
+        }
+
+        .progress-bar:hover {
+            background: rgba(255, 245, 230, 0.6);
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff9933, #800000);
+            width: 0;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: -5px;
+            width: 14px;
+            height: 14px;
+            background: #fff5e6;
+            border-radius: 50%;
+            border: 1px solid #800000;
+            box-shadow: 0 0 6px rgba(255, 153, 51, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .progress-bar:hover .progress::after {
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255, 153, 51, 0.6);
+        }
+
+        .lyrics {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            font-family: 'Noto Serif Devanagari', serif;
+            text-align: center;
+            font-size: 1.6em;
+            line-height: 1.9;
+            background: rgba(255, 245, 230, 0.25);
+            backdrop-filter: blur(1px);
+            padding: 10px;
+            border-radius: 10px;
+            min-height: 80px;
+            max-width: 80%;
+            width: 90%;
+            margin: 0;
+            border: 1px solid rgba(255, 153, 51, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .lyrics.highlight {
+            border-color: rgba(255, 153, 51, 0.8);
+            box-shadow: 0 8px 20px rgba(255, 153, 51, 0.3);
+            animation: glowBorder 0.5s ease-in-out;
+        }
+
+        @keyframes glowBorder {
+            from { box-shadow: 0 8px 20px rgba(255, 153, 51, 0.3); }
+            to { box-shadow: 0 8px 25px rgba(255, 153, 51, 0.5); }
+        }
+
+        .lyrics::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ff9933, transparent);
+        }
+
+        .lyrics span {
+            display: none;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .lyrics span.highlight {
+            display: block;
+            background: linear-gradient(to right, rgba(255, 245, 230, 0.6), rgba(245, 230, 211, 0.6));
+            color: #800000;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            animation: lyricFade 0.6s ease-in-out, lyricScale 0.6s ease-in-out;
+        }
+
+        @keyframes lyricFade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes lyricScale {
+            from { transform: scale(0.92); }
+            to { transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            h1::before,
+            h1::after {
+                width: 60px;
+            }
+
+            .container {
+                padding: 18px;
+                max-width: 480px;
+            }
+
+            .om-logo::before {
+                font-size: 2.8em;
+            }
+
+            .play-pause-button {
+                width: 45px;
+                height: 45px;
+                font-size: 1.4em;
+            }
+
+            .restart-button {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3em;
+            }
+
+            .custom-audio-controls {
+                padding: 8px 12px;
+                gap: 10px;
+            }
+
+            .progress-bar {
+                max-width: 180px;
+            }
+
+            .lyrics {
+                font-size: 1.4em;
+                padding: 15px;
+                min-height: 80px;
+            }
+        }
+
+        .video-error {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('hanuman-bg.jpg') no-repeat center/cover fixed;
+            z-index: -1;
+        }
+
+        @supports not (backdrop-filter: blur(10px)) {
+            .container,
+            .lyrics,
+            .custom-audio-controls {
+                background: rgba(255, 245, 230, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="background-video" preload="auto">
+        <source src="hanuman.mp4" type="video/mp4">
+    </video>
+    <div class="video-error" id="videoError"></div>
+    <div class="container">
+        <div class="om-logo"></div>
+        <h1>Hanuman Chalisa</h1>
+        <div class="audio-player">
+            <audio id="hanumanAudio" preload="auto">
+                <source src="hanuman-chalisa.mp3" type="audio/mpeg">
+            </audio>
+            <div class="custom-audio-controls">
+                <div class="controls">
+                    <button id="playPauseButton" class="play-pause-button" onclick="togglePlayPause()"><i class="fas fa-play"></i></button>
+                    <button class="restart-button" onclick="restartAudio()"><i class="fas fa-redo-alt"></i></button>
+                </div>
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lyrics" id="lyrics">
+        <span>श्रीगुरु चरन सरोज रज निज मनु मुकुरु सुधारि। बरनउँ रघुबर बिमल जसु जो दायकु फल चारि।</span>
+        <span>बुद्धिहीन तनु जानिके सुमिरौ पवन कुमार। बल बुद्धि बिद्या देहु मोहि हरहु कलेस बिकार।</span>
+        <span>जय हनुमान ज्ञान गुन सागर। जय कपीस तिहुँ लोक उजागर।</span>
+        <span>राम दूत अतुलित बल धामा। अंजनि पुत्र पवनसुत नामा।</span>
+        <span>महाबीर बिक्रम बजरंगी। कुमति निवार सुमति के संगी।</span>
+        <span>कंचन बरन बिराज सुबेसा। कानन कुंडल कुँचित केसा।</span>
+        <span>हाथ बज्र अउ ध्वजा बिराजै। काँधे मूँज जनेऊ साजै।</span>
+        <span>शंकर सुवन केसरी नंदन। तेज प्रताप महा जग बन्दन।</span>
+        <span>बिद्यावान गुनी अति चातुर। राम काज करिबे को आतुर।</span>
+        <span>प्रभु चरित्र सुनिबे को रसिया। राम लखन सीता मन बसिया।</span>
+        <span>सूक्ष्म रूप धरि सियहि दिखावा। बिकट रूप धरि लंक जरावा।</span>
+        <span>भीम रूप धरि असुर सँहारे। रामचन्द्र के काज सँवारे।</span>
+        <span>लाय सजीवन लखन जियाये। श्री रघुबीर हरषि उर लाये।</span>
+        <span>रघुपति कीन्ही बहुत बड़ाई। तुम मम प्रिय भरतहि सम भाई।</span>
+        <span>सहस बदन तुम्हरो जस गावैं। अस कहि श्रीपति कंठ लगावैं।</span>
+        <span>सनकादिक ब्रह्मादि मुनीसा। नारद शारद सहित अहीसा।</span>
+        <span>जम कुबेर दिगपाल जहाँ ते। कबि कोबिद कहि सके कहाँ ते।</span>
+        <span>तुम उपकार सुग्रीवहि कीन्हा। राम मिलाय राज पद दीन्हा।</span>
+        <span>तुम्हरो मंत्र बिभीषण माना। लंकेश्वर भै सब जग जाना।</span>
+        <span>जुग सहस्र जोजन पर भानु। लील्यो ताहि मधुर फल जानु।</span>
+        <span>प्रभु मुद्रिका मेलि मुख माहीं। जलधि लांघि गये अचरज नाहीं।</span>
+        <span>दुर्गम काज जगत के जेते। सुगम अनुग्रह तुम्हरे तेते।</span>
+        <span>राम दुआरे तुम रखवारे। होत न आज्ञा बिनु पैसारे।</span>
+        <span>सब सुख लहै तुम्हारी शरना। तुम रक्षक काहु को डर ना।</span>
+        <span>आपन तेज सम्हारो आपै। तीनों लोक हांक तें कांपै।</span>
+        <span>भूत पिसाच निकट नहिं आवै। महाबीर जब नाम सुनावै।</span>
+        <span>नासै रोग हरै सब पीरा। जपत निरंतर हनुमत बीरा।</span>
+        <span>संकट तें हनुमान छुडावै। मन क्रम बचन ध्यान जो लावै।</span>
+        <span>सब पर राम तपस्वी राजा। तिन के काज सकल तुम साजा।</span>
+        <span>और मनोरथ जो कोई लावै। सोइ अमित जीवन फल पावै।</span>
+        <span>चारों जुग परताप तुम्हारा। है परसिद्ध जगत उजियारा।</span>
+        <span>साधु सन्त के तुम रखवारे। असुर निकंदन राम दुलारे।</span>
+        <span>अष्ट सिद्धि नौ निधि के दाता। अस बर दीन जानकी माता।</span>
+        <span>राम रसायन तुम्हरे पासा। सदा रहो रघुपति के दासा।</span>
+        <span>तुम्हरे भजन राम को पावै। जनम जनम के दुख बिसरावै।</span>
+        <span>अंत काल रघुबीर पुर जाई। जहाँ जन्म हरि भक्त कहाई।</span>
+        <span>और देवता चित न धरई। हनुमत सेइ सर्ब सुख करई।</span>
+        <span>संकट कटै मिटै सब पीरा। जो सुमिरै हनुमत बल बीरा।</span>
+        <span>जय जय जय हनुमान गोसाईं। कृपा करहु गुरुदेव की नाईं।</span>
+        <span>जो सत बार पाठ कर कोई। छूटहि बंदि महा सुख होई।</span>
+        <span>जो यह पढ़ै हनुमान चालीसा। होय सिद्धि साखी गौरीसा।</span>
+        <span>तुलसीदास सदा हरि चेरा। कीजै नाथ हृदय मंह डेरा।</span>
+        <span>पवन तनय संकट हरन मंगल मूरति रूप।</span>
+        <span>राम लखन सीता सहित हृदय बसहु सुर भूप।</span>
+    </div>
+    <script>
+        const audio = document.getElementById('hanumanAudio'),
+              lyricsContainer = document.getElementById('lyrics'),
+              lyricSpans = lyricsContainer.getElementsByTagName('span'),
+              progressBar = document.getElementById('progressBar'),
+              progress = document.getElementById('progress'),
+              video = document.getElementById('background-video'),
+              videoError = document.getElementById('videoError'),
+              playPauseButton = document.getElementById('playPauseButton'),
+              lyricTimings = [6.2,10.5,15.0,23.6,28.8,31.6,35.0,40.9,46.2,53.3,57.3,63.8,68.1,71.9,85.0,92.0,99.0,106.0,113.0,120.0,127.0,134.0,141.0,147.0,154.8,161.8,168.8,175.8,182.8,189.8,195.5,202.0,208.5,215.0,221.5,228.0,234.5,241.0,247.5,254.0,260.5,267.0,273.5,300.0];
+        let lastHighlightedLine = -1, userInteracted = false;
+
+        function highlightLyrics() {
+            if (!audio || audio.paused) return;
+            const t = audio.currentTime;
+            let i = -1;
+            for (let n = 0; n < lyricTimings.length && t >= lyricTimings[n]; i = n++);
+            if (i >= 0 && i !== lastHighlightedLine) {
+                Array.from(lyricSpans).forEach(s => s.style.display = 'none');
+                if (i < lyricSpans.length) {
+                    lyricSpans[i].style.display = 'block';
+                    lyricSpans[i].classList.add('highlight');
+                    lyricsContainer.classList.add('highlight');
+                    setTimeout(() => lyricsContainer.classList.remove('highlight'), 500);
+                    lastHighlightedLine = i;
+                }
+            }
+        }
+
+        function updateProgress() {
+            if (audio && audio.duration) {
+                progress.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+            }
+        }
+
+        function updateFrame() {
+            highlightLyrics();
+            updateProgress();
+            if (!audio.paused) requestAnimationFrame(updateFrame);
+        }
+
+        function seekAudio(e) {
+            if (!audio || !audio.duration) return;
+            const rect = progressBar.getBoundingClientRect(),
+                  x = e.clientX - rect.left,
+                  width = rect.width,
+                  time = (x / width) * audio.duration;
+            audio.currentTime = time;
+            lastHighlightedLine = -1;
+            highlightLyrics();
+        }
+
+        function togglePlayPause() {
+            if (!audio) return;
+            userInteracted = true;
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+                    requestAnimationFrame(updateFrame);
+                }).catch(e => {
+                    console.error('Playback error:', e.name, e.message);
+                    let msg = 'Error playing audio. Check `hanuman-chalisa.mp3` path.';
+                    if (e.name === 'NotAllowedError') msg = 'Playback blocked. Allow autoplay in browser settings or interact with the page first.';
+                    if (e.name === 'NotSupportedError') msg = 'Audio format not supported. Ensure `hanuman-chalisa.mp3` is valid MP3.';
+                    alert(msg);
+                });
+            } else {
+                audio.pause();
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        }
+
+        function restartAudio() {
+            if (!audio) return;
+            userInteracted = true;
+            audio.currentTime = 0;
+            lastHighlightedLine = -1;
+            Array.from(lyricSpans).forEach(s => s.style.display = 'none');
+            lyricSpans[0].style.display = 'block';
+            lyricSpans[0].classList.add('highlight');
+            playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+            audio.play().then(() => {
+                requestAnimationFrame(updateFrame);
+            }).catch(e => {
+                console.error('Playback error:', e.name, e.message);
+                let msg = 'Error playing audio. Check `hanuman-chalisa.mp3` path.';
+                if (e.name === 'NotAllowedError') msg = 'Playback blocked. Allow autoplay in browser settings or interact with the page first.';
+                if (e.name === 'NotSupportedError') msg = 'Audio format not supported. Ensure `hanuman-chalisa.mp3` is valid MP3.';
+                alert(msg);
+            });
+        }
+
+        if (video) {
+            video.onerror = () => {
+                console.error('Video error:', video.error);
+                video.style.display = 'none';
+                videoError.style.display = 'block';
+            };
+            video.onloadeddata = () => {
+                video.style.display = 'block';
+                videoError.style.display = 'none';
+            };
+        }
+
+        if (audio) {
+            audio.onended = () => {
+                Array.from(lyricSpans).forEach(s => s.style.display = 'none');
+                lastHighlightedLine = -1;
+                progress.style.width = '0%';
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            };
+            audio.onerror = () => {
+                console.error('Audio load error:', audio.error);
+                alert('Error loading `hanuman-chalisa.mp3`. Check file path or format.');
+            };
+            audio.onloadedmetadata = () => {
+                progress.style.width = '0%';
+                Array.from(lyricSpans).forEach(s => s.style.display = 'none');
+                lyricSpans[0].style.display = 'block';
+                lyricSpans[0].classList.add('highlight');
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            };
+        }
+
+        if (progressBar) {
+            progressBar.onclick = seekAudio;
+        }
+
+        window.onload = () => {
+            if (audio && lyricsContainer && progressBar) {
+                lyricSpans[0].style.display = 'block';
+                lyricSpans[0].classList.add('highlight');
+                progress.style.width = '0%';
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+                alert('Page loading failed. Please check console for errors.');
+            }
+            document.addEventListener('click', () => { userInteracted = true; });
+        };
+    </script>
+</body>
+</html>
